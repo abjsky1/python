@@ -393,3 +393,255 @@ for number in numbers :
     output[number%3-1].append(number)
 
 print(output)
+
+# 231p
+print( range(5) )
+print( list( range( 5 ) ) )
+
+print( list( range( 3 , 8 ) ) )
+
+print( list( range( 0 , 10 , 2 ) ) )
+
+# 233p
+# for 와 range 함께
+# 1부터 10까지 출력
+for i in range(1, 11):
+    print(i)
+
+for i in range(10, 0 , -1):
+    print(i)
+
+for i in range(1, 11 , 2):
+    print(i)
+
+# 240p
+i=0
+while i <= 10 :
+    print(i)
+    i += 1 
+
+list_a = [10, 20, 30, 10, 30]
+value = 10
+while value in list_a :
+    list_a.remove(value)
+    print(list_a)
+
+# 244p
+for i in range(1 , 11, 1) :
+    print( i )
+    if i == 3:
+        break
+for i in range(1,11,1):
+    print( i )
+    if i == 3:
+        continue
+
+
+numbers = [1,2,6,8,4,3,2,1,9,5,4,9,7,2,1,3,5,4,8,9,7,2,3]
+counter = {}
+
+for number in numbers :
+    if number in counter :
+        counter[number] += 1
+    else :
+        counter[number] = 1
+
+print(counter)
+
+# 251p
+numbers = [103,52,273,32,77]
+print( min(numbers) )
+print( max(numbers) )
+print( sum(numbers) )
+
+# 252p
+numbers_reversed = reversed(numbers)
+print( numbers_reversed )
+print( next(numbers_reversed) )
+print( list(numbers_reversed) )
+
+# 264p
+# 이터러블 : 요소들을 하나씩 차례로 꺼내기 가능한 객체 의미
+# 이터레이터 : 이터러블 중에서 하나씩 차례로 빼낼 수 있는 요소
+# 이터레이터 가능한 타입 : 리스트 / 딕셔너리 / 문자열 / 튜플 등
+# 이터레이터 하나씩 꺼내는 함수 : next( ) 함수 ---> 이터러블
+# 즉, 이터레이터가 존재하는 자료만 for 사용가능
+
+# 254p
+numbers = [103,52,273,32,77]
+print( enumerate(numbers) )
+print( list( enumerate(numbers) ) )     
+# [(0, 103), (1, 52), (2, 273), (3, 32), (4, 77)]
+# [ (index , value) , (index , value) , (index , value) ]
+for index, value in enumerate(numbers):
+    print(index, value)
+
+# 256p
+dict_a = { "name" : "김길리" , "age" : 10 }
+
+print( dict_a.items() )
+
+for key, value in dict_a.items():
+    print( key, value )
+
+# 258p
+array = [ ]
+for i in range( 0 , 21 , 2 ) :
+    array.append( i )
+print(array)
+
+array = [ i for i in range( 0 , 21 , 2 ) ]
+print(array)
+
+array = [ i for i in range( 0 , 21 , 2 ) if i != 10 ]
+print(array)
+
+array = [ i for i in range( 0 , 21 , 2 ) if i != 10 and i != 16 ]
+print(array)
+
+# 263p
+print("""안녕하세요1
+안녕하세요2""")
+
+print("안녕하세요1\n안녕하세요2")
+
+print( ("안녕하세요1\n" "안녕하세요2") )
+
+print( "\n".join( [ "안녕하세요1" , "안녕하세요2" ] ) )
+
+print( "-".join( "김길리" ) )   # 전처리(텍스트마이닝) 등
+
+
+print(list(range(3,10,3)))
+
+key_list = ["a" , "b" , "c" , "d"]
+value_list = [1,2,3,4]
+charater = {}
+
+a=0
+for x in key_list :
+    a += 1
+    b = 0
+    for y in value_list :
+        b += 1
+        if a==b :
+            charater[x] = y
+
+print(charater)
+
+
+max_value = 0
+a = 0
+b = 0
+
+for i in range(1,100) :
+    j = 100 - i
+    x = i * j
+    if x > max_value :
+        max_value = x
+        a = i
+        b = j
+
+print( a, b , max_value)
+
+
+array = [ i for i in range( 0 , 21 , 2 ) if i != 10 and i != 16 ]
+
+output = [ i for i in range(1, 101)
+          if str("{:b}".format(i)).count("0")==1]
+
+for i in output :
+    print(f"{i} : {"{:b}".format(i)}")
+print("합계 : ", sum(output))
+
+
+
+
+charater = {
+    "name" : "기사",
+    "level" : 12,
+    "item" : {
+        "sword" : "불꽃의 검",
+        "armor" : "풀플레이트",
+    },
+    "skill" : ["베기", "세게 베기", "아주 세게 베기"]
+}
+
+for key in charater :
+    if type(charater[key]) is str or  type(charater[key]) is int :
+        print(f"{key} : {charater[key]}")
+    if type(charater[key]) is list:
+        for aa in charater[key] :
+            print(f"{key} : {aa}")
+    if type(charater[key]) is dict :    # charater[key] = "item" : { "sword" : "불꽃의 검", "armor" : "풀플레이트" }
+        for bb in charater[key] :
+                print(f"{bb} : {charater[key][bb]}")
+
+
+list_a = [1,2,3,4,1,2,3,1,4,1,2,3]
+dict_a = {}
+
+for i in list_a :
+    if i in dict_a :
+        dict_a[i] += 1
+    else :
+        dict_a[i] = 1
+
+count = 0
+
+for i in dict_a :
+    count += 1
+
+print(len(dict_a))
+print(f"""{list_a}에서
+사용된 숫자의 종류는 {len(dict_a)}개입니다.""")
+
+print(f"""{list_a}에서
+사용된 숫자의 종류는 {count}개입니다.""")
+
+print(f"참고 : {dict_a}")
+
+
+
+
+
+
+
+
+dna_list = "ctacaatgtcagtatacccattgcattagccgg"
+dict_a = {}
+
+for i in dna_list :
+    if i in dict_a :
+        dict_a[i] += 1 
+    else :
+        dict_a[i] = 1
+
+print(f"염기 서열을 입력해주세요 : {dna_list}")
+
+for i in dict_a :
+    print(f"{i}의 개수: {dict_a[i]}")
+
+for i, value in enumerate(dict_a) :
+    print(f"{i}의 개수: {dict_a[value]}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
