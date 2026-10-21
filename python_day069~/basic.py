@@ -604,10 +604,6 @@ print(f"참고 : {dict_a}")
 
 
 
-
-
-
-
 dna_list = "ctacaatgtcagtatacccattgcattagccgg"
 dict_a = {}
 
@@ -627,20 +623,420 @@ for i, value in enumerate(dict_a) :
 
 
 
+# [ day071 - 20261021 ]
+
+list_a = [1,2,[3,4],5,[6,7],[8,9]]
+
+list_b = []
+
+for i in list_a :
+    if type(i) == list :
+        for j in i :
+            list_b.append(j)
+    else :
+        list_b.append(i)
+
+print(list_b)
+
+# ++ 
+def make_1chawon_list( a ) :
+    if type(a) == list :
+        for b in a :
+            make_1chawon_list(b)
+    else :
+        list_b.append(a)
+    
+make_1chawon_list(list_a)
+
+print(list_b)
+
+list_str = str(list_a)
+# print(list_str)
+list_s = list_str.split(",")
+# print(list_s)
+# print(list_s[0])
+for i in list_s :
+    for j in i :
+        if j == "[" :
+            continue
+        if j == "]" :
+            continue
+        if j == " " :
+            continue
+        if j.isdigit :
+            list_b.append(int(j))
+        else :
+            list_b.append(j)
+
+print(list_b)
+    
+
+# 275p
+
+# 함수 : 코드의 집합
+# 매개변수 : 함수를 호출할 때는 괄호 내부에 여러가지를 넣는 변수
+# 리턴값 : 힘수를 호출해서 최종적으로 나오는 결과
+
+# 값 재사용 : 변수 , 코드 재사용 = 반복문/함수
+
+def print_3_times( ) :
+    print("hi")
+    print("hi")
+    print("hi")
+
+print_3_times()
+
+# 함수 : 식별자 O  ,  반복문 : 식별자 X
+
+# 276p
+def print_n_times( value , n ) :
+    for i in range( n ) :
+        print( value )
+
+print_n_times("안녕" , 5)
+
+# 인수/인자값 : 함수 호출할 때, 매개변수에 전달하는 값
+
+# 278p
+# def 함수명( 매개변수 , 매개변수 , *가변매개변수 ) :
+# 가변매개변수 조건 : 가장 뒤에 존재 , 1번만 사용
+def print_n_times2( n , *values ) :
+    for i in range( n ) :
+        for value in values :
+            print( value )
+        print( )
+
+print_n_times2( 3 , "안녕" , "hi" , "hello" )
+print_n_times2( 2 , "안녕" , "hi" )
+
+# 279p
+def print_n_times3( value , n=2 ) :
+    for i in range( n ) :
+        print( value )
+
+print_n_times3( "hi1" )
+print_n_times3( "hi2" , 3 )
+
+# 280p 
+# 기본 매개변수가 가변 매개변수보다 앞에 올 때, ( n=2 , *value )
+# 가변 매개변수가 기본 매개변수보다 앞에 올 때, ( *value , n=2 )
+# 해결방안 : 키워드 매개변수
+print( "안녕하세요1" )
+# end 매개변수는 출력 이후 무엇을 할지
+# 기본값 : end = "\n"
+print( "안녕하세요2" , end = "\n" )
+print( "안녕하세요3" , end = "" )
+print( "안녕하세요4" , end = "" ) 
+
+def print_n_times4( *values , n=2 ) :
+    for i in range( n ) :
+        for value in values :
+            print(value)
+        print()
+
+print_n_times4( "hi" , "hello" , "kkk" , n=3 )
+print_n_times4( "hi" , "hello" , "kkk" , 10 )
+
+# 285p
+def return_test() :
+    print("A 위치 입니다.")
+    return  # 함수 종료
+    print("B 위치 입니다.")
+
+return_test()
+
+def return_test2() :
+    return 100 # 함수 종료
+
+return_test2()
+
+def return_test3() :
+    return # 함수 종료
+
+value = return_test3()
+
+print(value)
+
+# 287p
+def sum_all(start , end) :
+    output = 0
+    for i in range(start , end +1) :
+        output += i
+    return output
+
+print("0 to 100:", sum_all(0,100))
+print("0 to 1000:", sum_all(0,1000))
+print("50 to 100:", sum_all(50,100))
+print("500 to 1000:", sum_all(500,1000))
+
+def sum_all(start=0 , end=100 , step=1) :
+    output = 0
+    for i in range(start , end +1 , step) :
+        output += i
+    return output
+
+print("A.", sum_all(0,100,10))
+print("B.", sum_all(end=100))
+print("C.", sum_all(end=100, step=2))
+
+# 293p
+def factorial( n ) :
+    output = 1
+    for i in range(2 , n+1):
+        output *= i
+    return output
+
+print("1! : ", factorial(1))
+print("2! : ", factorial(2))
+print("3! : ", factorial(3))
+print("4! : ", factorial(4))
+print("5! : ", factorial(5))
+
+def factorial2( n ) :
+    if n == 1 :
+        return 1
+    else : 
+        return n * factorial2(n-1)
+
+print("1! : ", factorial2(1))
+print("2! : ", factorial2(2))
+print("3! : ", factorial2(3))
+print("4! : ", factorial2(4))
+print("5! : ", factorial2(5))
+
+
+# gugudan
+for dan in range( 2 , 10 , 1 ) :
+    for gob in range( 1 , 10 , 1 ) :
+        print( dan , " * " , gob , " = " , dan * gob )
+
+def gugudan( dan=2 , gob=1 ) :
+    if dan > 9 :
+        return
+    if gob > 9 :
+        gugudan(dan+1, 1)
+        return
+    print( dan , " * " , gob , " = " , dan * gob )
+    gugudan(dan , gob+1)
+        
+gugudan()
+
+# 297p ~ 
+# 피보나치수열
+# 전위순회 중위순회 후위순회 레벨순회
+
+
+# 317p
+# 튜플 : 여러 자료들을 저장하는 리스트와 비슷한 자료형
+# 특징 : 초기화 이후 수정 불가능
+# 사용처 : 읽기모드용 VO , 수정 없는 자료 ( 리스트보다 메모리성능 좋음 ) 
+tuple_test = (10, 20, 30)
+tuple_test[0]
+tuple_test[1]
+tuple_test[2]
+# tuple_test[0] = 1
+
+tuple_test2 = [273]
+tuple_test3 = (273)
+tuple_test4 = (273,)
+print(tuple_test2 , tuple_test3 , tuple_test4)
+
+tuple_test5 = 10, 20, 30, 40
+tuple_test6 = 273,
+print(tuple_test5 , tuple_test6)
+
+(a , b) = (10, 20)
+print(a , b)
+a , b = 10 , 20
+print(a , b)
+print(10 ,20)
+
+a , b = b , a
+print(a , b)
+
+# 함수/연산 결과 항상 1개
+def test() : 
+    return 10,20 # 결과 1개 (10 과 20 튜플로 묶은 튜플 1개)
+
+# 322p
+# 콜백함수 : 함수 그 자체를 매개변수로 전달하여 전달받은 곳에서 전달받은 함수 호출
+def call_10_items( func ) :
+    func()
+
+def print_hello() :
+    print("안녕하세요")
+
+call_10_items( print_hello() )
+call_10_items( print_hello )
+
+# 323p
+# java : 리스트.stream.forEach() , 리스트.stream.map() , 리스트.stream.filter()
+# react : 리스트.forEach() , 리스트.map() , 리스트.filter
+# python : for x in 리스트 , map( 코드 , 리스트 ) , filter( 코드 , 리스트 )
+# forEach 단순반복(return X) , map 반복+반환(return O) , filter 반복+조건반환
+def power( item ) :
+    return item * item
+def under_3( item ) :
+    return item < 3
+
+list_a = [1,2,3,4,5]
+print( list( map( power , list_a ) ) )
+
+print( list( filter( under_3 , list_a ) ) ) 
+
+# 324p
+# 람다 : 코드 줄이기
+# lambda 매개변수 : 리턴값
+power = lambda x : x*x
+output_a = map( power , list_a )
+# 인라인 람다
+output_a = map( lambda item : item*item , list_a )
+
+
+list_input_a = [1,2,3,4,5]
+
+output_a = map(lambda x : x*x , list_input_a )
+print(output_a)
+print(list(output_a))
+print()
+
+output_b = filter(lambda x: x<3 , list_input_a )
+print(output_b)
+print(list(output_b))
 
 
 
+numbers = [1,2,3,4,5,6]
+print("::".join( map( str , numbers ) ) ) 
+
+numbers = list(range(1, 10+1))
+
+print(list(filter( lambda x : x%2 != 0  , numbers )))
+
+print(list(filter( lambda x : x >= 3 and x<7 , numbers )))
+
+print(list(filter( lambda x : x**2 < 50 , numbers )))
+
+pp = 100
+mi = 2
+ma = 10
+memo = {}
+
+def aaa( x , y ) :
+    
+    key = str( [x,y] )
+
+    if key in memo :
+        return memo[key]
+
+    if x < 0 :
+        return 0
+
+    if x == 0 :
+        return 1
+
+    count = 0
+
+    for i in range(y , ma+1) :
+        count += aaa(x-i , i)
+    memo[key] = count
+
+    return count
+
+print(aaa(pp,mi))
+
+# aaa( 10 , 2 )
+# key = str( [10,2] )   key = "[10,2]"
+# if key in memo :  False
+# if x < 0 :        False
+# if x == 0 :       False
+# count = 0
+# for i in range(2 , 10+1) :
+#     count += aaa(10-2, 2)
+
+    # aaa( 8 , 2 )
+    # key = str( [8,2] )   key = "[8,2]"
+    # if key in memo :  False
+    # if x < 0 :        False
+    # if x == 0 :       False
+    # count = 0
+    # for i in range(2 , 10+1) :
+    #     count += aaa(8-2, 2)
+
+        # aaa( 6 , 2 )
+        # key = str( [6,2] )   key = "[6,2]"
+        # if key in memo :  False
+        # if x < 0 :        False
+        # if x == 0 :       False
+        # count = 0
+        # for i in range(2 , 10+1) :
+        #     count += aaa(6-2, 2)
+
+            # aaa( 4 , 2 )
+            # key = str( [4,2] )   key = "[4,2]"
+            # if key in memo :  False
+            # if x < 0 :        False
+            # if x == 0 :       False
+            # count = 0
+            # for i in range(2 , 10+1) :
+            #     count += aaa(4-2, 2)
+
+                # aaa( 2 , 2 )
+                # key = str( [2,2] )   key = "[2,2]"
+                # if key in memo :  False
+                # if x < 0 :        False
+                # if x == 0 :       False
+                # count = 0
+                # for i in range(2 , 10+1) :
+                #     count += aaa(2-2, 2)
+
+                    # aaa( 0 , 2 )
+                    # key = str( [0,2] )   key = "[0,2]"
+                    # if key in memo :  False
+                    # if x < 0 :        False
+                    # if x == 0 :       True
+                    #   return 1
+
+                #     count += aaa(2-3 , 2)  # False
+                #     count += aaa(2-4 , 2)  # False
+                #     count += aaa(2-5 , 2)  # False
+                #     count += aaa(2-6 , 2)  # False
+                #     count += aaa(2-7 , 2)  # False
+                #     count += aaa(2-8 , 2)  # False
+                #     count += aaa(2-9 , 2)  # False
+                #     count += aaa(2-10, 2)  # False
+
+                # memo[key] = count         memo = { [2,2] : 1 }
+                # return count
 
 
+총인원 = 100
+테이블당최소인원 = 2
+테이블당최대인원 = 10
+중복간단해결메모 = {}
 
+def 테이블배정경우의수( 현재남은인원 , 테이블배정인원 ) :
 
+    메모작성 = str( [현재남은인원, 테이블배정인원] )
+    
+    if 현재남은인원 == 0 :
+        return 1    # 가능한 경우의 수 , 카운트 O
+    if 현재남은인원 < 0 :
+        return 0    # 불가능한 경우의 수 , 카운트 X
 
+    count = 0
 
+    for 테이블에앉힐인원 in range( 테이블배정인원 , 테이블당최대인원+1 ) :
 
+        result = 테이블배정경우의수( 현재남은인원-테이블에앉힐인원 , 테이블에앉힐인원 )
 
+        count += result
 
+    중복간단해결메모[메모작성] = count
 
+    return count
 
+테이블배정경우의수( 총인원 , 테이블당최소인원 )
 
 
 
