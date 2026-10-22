@@ -1040,4 +1040,140 @@ def 테이블배정경우의수( 현재남은인원 , 테이블배정인원 ) :
 
 
 
+# [ day072 - 20261022 ]
+
+# 365p
+# TypeError:
+# ValueError:
+a = input("정수 입력>> ")
+
+if a.isdigit() :
+    int_a = int(a)
+    print(int_a + 2)
+else :
+    print("정수가 아님")
+
+# 367p
+b = input("정수 입력>> ")
+
+try :
+    int_b = int(b)
+    print(int_b + 2)
+except :
+    print("정수가 아님")
+
+# 368p
+c = input("정수 입력 : ")
+try :
+    int(c)
+except :
+    pass  # 일단 넘어가기
+
+# 369p
+d = input("정수 입력 : ")
+try : 
+    int(d)
+except : 
+    print("정수가 아닙니다.")
+else : 
+    print("정수가 맞습니다.")
+
+# 370p
+e = input("정수 입력 : ")
+try :
+    int(e)
+except :
+    print("예외 발생했을 때 실행")
+else :
+    print("예외 발생하지 않았을 때 실행")
+finally :   # 주로 외부 연결 종료시 사용
+    print("무조건 실행")
+
+
+# 374p
+try :
+    file = open("info.txt", "w")    # w 옵션 : 파일이 없으면 생성
+    예외.발생코드()
+    print("파일 닫기 1")
+    file.close()    # 파일 닫기
+except :
+    print("오류 발생")
+finally :
+    print( "닫기 확인 1" , file.closed )
+    print( "파일 닫기 2" )
+    file.close()    # 파일 닫기
+    print( "닫기 확인 2" , file.closed )
+
+# 376p ~ 378p
+# finally 실무 코드
+# return 함수종료 or break 반복문종료 이후 무조건 실행코드 만들기.
+
+# output = 10 + "개"
+# int("하이")
+# cursor.close)
+# [1,2,3,4,5][10]
+
+
+# 384p
+# 예외객체 : 발생한 예외정보 갖는 객체
+# 예외클래스 : Exception( 예외 최상위클래스 )
+# except 예외클래스명 as 변수명
+# as 키워드 : 클래스의 객체변수 생성
+# raise : 강제로 예외발생 , 주로 CRUD 실패500 의미
+list_number = [52, 273, 32, 72, 100]
+
+try :
+    number_input = int( input("정수 입력 >> ") )
+    print( list_number[ number_input ] )
+except Exception as e :
+    print( e )
+
+# 386p
+list_number = [52, 273, 32, 72, 100]
+
+try :
+    number_input = int( input("정수 입력 >> ") )
+    print( list_number[ number_input ] )
+except ValueError as e :
+    print( e )
+except IndexError as e :
+    print( e )
+except Exception as e :
+    print( e )
+
+# 391p
+list_number = [52, 273, 32, 72, 100]
+
+try :
+    number_input = int( input("정수 입력 >> ") )
+    print( list_number[ number_input ] )
+    raise NotImplementedError
+except Exception as e :
+    print( e )
+
+
+# ++
+# 346p
+a = 1
+
+def test( ) :
+    global a    # 단순 호출이면 global 생략 가능
+    b = a
+    a = 2
+    print(f"a={a}, b={b}")
+
+print(f"global_a={a}")
+test()
+print(f"global_a={a}")
+
+a = 1
+
+def test( a) :
+    b = a
+    a = 2
+    print(f"a={a}, b={b}")
+
+print(f"global_a={a}")
+test(a)
+print(f"global_a={a}")
 
