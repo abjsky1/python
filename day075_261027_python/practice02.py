@@ -24,7 +24,7 @@ print(f"데이터 형태: {data.shape}")
 # - 전체 데이터(data)에서 '구매 금액(마지막 열, 4번 열)'만 추출하여 `sales` 배열을 생성하세요.
 # - 고객들의 '평균 구매 금액'과 '총 매출액(합계)'을 계산하여 출력하세요.
 
-sales = np.array(data[:,4], dtype=np.float64)
+sales = data[:,4]
 print(sales)
 print( np.mean(sales) )
 print( np.sum(sales) )
@@ -71,16 +71,55 @@ print(count)
 # - 정규화된 값이 0.9 이상(상위 10% 수준)인 고객을 'VVIP'로 정의하고, 해당 VVIP 고객들의 모든 정보(Row 전체)를 추출하여 출력하세요.
 # -- 추출된 VVIP 고객 데이터를 '구매 금액(4번 열)' 기준 내림차순(높은 금액 순)으로 정렬하여 상위 5명의 정보를 출력하세요.
 
+
+정규화 = ( sales - np.min( sales ) ) / ( np.max( sales ) - np.min(sales) )
+print(정규화)
+print(정규화 >= 0.9)
+print(data[정규화>=0.9])
+vvvvvip = data[정규화>=0.9]
+print(vvvvvip)
+# 정렬된 순번 반환
+# 오름차순
+# 내림차순 [::-1] = 역순
+정렬결과 = np.argsort(vvvvvip[:,4][::-1])
+print(정렬결과)
+print(vvvvvip[정렬결과])
+vivivip = vvvvvip[정렬결과]
+print( vivivip[:5] )
+
+
+
+x = np.array( [ [1,2,3],[4,5,6] ] )
+print( x[0] )    #  0 행
+print( x[0,1] )  #  0 행   1열
+print( x[0,1:] ) #  0 행   1열~
+print( x[:,2] )  # 모든행   2열
+y = x[0,1]
+y = 10
+print(x)
+y2 = x[:,2]
+y2[0] = 10
+print(x)
+
+# 슬라이싱한 결과가 배열이면서 특정 인덱스의 요소값 수정시 원본 같이 수정됨.
+# 슬라이싱한 결과값이 리터럴(값) 이면 비파괴적 , 주소값 이면 파괴적
+
+
+a = np.arange(1,11)
+print(a[ [2,3] ] )
+
+
+
+
+
+
+
+
 mms = ( sales - np.min(sales) )  /  ( np.max(sales) - np.min(sales) )
-
 vvip = mms >= 0.9
-
 info = data[vvip , :]
-
 sort_info = np.argsort(-info[: , 4])
-
 sort_vvip = info[sort_info]
-
 print(sort_vvip[:5])
 
 
