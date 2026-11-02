@@ -85,6 +85,11 @@ async def run( ) :
         # 크로미움( 구글 회사 제공하는 백그라운드용 오픈소스 브라우저 )
         # await p.chromium.lanuch( headless = True (백그라운드모드) / False (뷰모드) )
         browser = await p.chromium.launch( headless = False )
+        # 기존 브라우저 선언 아래에 추가
+        browser = await browser.new_context(
+                                            viewport={"width": 1920, "height": 1080},
+                                            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+                                            )
         # 현재 실행된 크로미움의 새로운 페이지(빈 페이지) 열기
         page = await browser.new_page()
         # 빈 페이지에 특정한 URL 주소 대입/이동
