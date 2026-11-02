@@ -291,7 +291,7 @@ print( df['성별'].value_counts(dropna=False) )
 
 
 # 4-3 (형변환): 이용시간, 거리 등 주요 수치형 변수는 pd.to_numeric으로 변환하고, 날짜 데이터는 pd.to_datetime으로 객체화한다.
-# * : pd.to_numeric( df[컬럼명] , erros = 'coerce' )  ==>>  변환 중에 불가능한 오류 발생시 강제로 치환
+# * : pd.to_numeric( df[컬럼명] , errors = 'coerce' )  ==>>  변환 중에 불가능한 오류 발생시 강제로 치환
 df.info()
 df.head()
 df["대여일시"] = pd.to_datetime(df["대여일시"])
