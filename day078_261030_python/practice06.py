@@ -171,6 +171,7 @@ plt.show()
 
 sns.countplot( data= df , x= "Survived" , hue= "Survived" )
 plt.title(f"{"Survived"} 별 인원 수 (seaborn)")
+plt.xticks( [0,1] , ['사망' , '생존'] )  # x축의 수치값을 범주값으로 변경.
 plt.ylabel("인원 수")
 plt.show()
 
@@ -190,17 +191,46 @@ plt.hist( df[ df['Survived'] == '0' ]["Age"] , bins= 20 , label= "사망" , colo
 plt.hist( df[ df['Survived'] == '1' ]["Age"] , bins= 20 , label= '생존' , color= 'skyblue' , alpha= 0.4 )
 plt.show()
 
-# 5-4 (성별): sns.countplot을 사용하여 성별(Sex)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
+# 교수님 풀이
+# KDE : 밀도 추정 곡성 속성
+sns.histplot( data= df[df['Survived']==0]['Age'], label="사망자" , kde= True )
+sns.histplot( data= df[df['Survived']==1]['Age'], label="생존자" , kde= True )
+plt.legend()
+plt.show()
+
+# 5-3 (성별): sns.countplot을 사용하여 성별(Sex)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
 sns.countplot(data= df , x= "Sex" , hue= "Survived")
 plt.show()
 
-# 5-5 (객실 등급): sns.countplot을 사용하여 객실 등급(Pclass)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
+# 5-4 (객실 등급): sns.countplot을 사용하여 객실 등급(Pclass)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
 sns.countplot(data= df , x= "Pclass" , hue= "Survived")
 plt.show()
 
-# 5-6 (승선 항구): sns.countplot을 사용하여 승선 항구(Embarked)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
+# 5-5 (승선 항구): sns.countplot을 사용하여 승선 항구(Embarked)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
 sns.countplot(data= df , x= 'Embarked' , hue= 'Survived')
 plt.show()
+
+
+# 1. 항구별 객실 등급 인원 그래프
+sns.countplot(data=df, x="Embarked", hue="Pclass")
+plt.title("항구별 객실 등급 인원")
+plt.show()
+
+# 2. 항구별 객실 등급 비율 표 (각 항구 안에서 비율)
+class_ratio = pd.crosstab(df["Embarked"], df["Pclass"], normalize="index")
+print(class_ratio.round(2))
+
+
+# 1. 항구별 생존율 계산
+port_rate = df.groupby("Embarked")["Survived"].mean()
+print(port_rate.round(2))
+
+# 2. 항구별 생존율 그래프
+sns.barplot(data=df, x="Embarked", y="Survived", errorbar=None)
+plt.title("항구별 생존율")
+plt.ylabel("생존율")
+plt.show()
+
 
 
 
@@ -261,6 +291,7 @@ print( df['성별'].value_counts(dropna=False) )
 
 
 # 4-3 (형변환): 이용시간, 거리 등 주요 수치형 변수는 pd.to_numeric으로 변환하고, 날짜 데이터는 pd.to_datetime으로 객체화한다.
+# * : pd.to_numeric( df[컬럼명] , erros = 'coerce' )  ==>>  변환 중에 불가능한 오류 발생시 강제로 치환
 df.info()
 df.head()
 df["대여일시"] = pd.to_datetime(df["대여일시"])
@@ -308,7 +339,11 @@ plt.show()
 sns.heatmap(data= df[['이용시간(분)', '이용거리(M)', '대여 시간대']].corr() , annot=True , fmt= '.2f')
 plt.show()
 
-
+# 교수님 풀이
+수치형자료들 = df.select_dtypes( include= 'number' )
+상관계수 = 수치형자료들.corr()  # 상관계수 추출
+sns.heatmap(상관계수 , fmt=".2f" , annot= True )
+plt.show()
 
 
 
