@@ -19,7 +19,7 @@ async def run( ) :
     async with async_playwright() as p :
         # 크로미움( 구글 회사 제공하는 백그라운드용 오픈소스 브라우저 )
         # await p.chromium.lanuch( headless = True (백그라운드모드) / False (뷰모드) )
-        browser = await p.chromium.launch( headless = False )
+        browser = await p.chromium.launch( headless = True )
         # 기존 브라우저 선언 아래에 추가
         browser = await browser.new_context(
                                             viewport={"width": 1920, "height": 1080},
@@ -36,6 +36,13 @@ async def run( ) :
 # 2-1 (페이지 순회): 1페이지부터 3페이지까지 반복문을 통해 동적으로 페이지를 이동한다.
 
         for i in range(1 , 4) :
+
+            # 교수님 풀이 방법
+            # buttonList = await page.query_selector_all( '.pagination .page a' )
+            # for i in range(1,4) :
+            #     await buttonList[i-1].click()
+            #     await page.wait_for_timeout( 3000 )
+
             if i > 1 :
                 await page.locator(f'.pagination .page a[href="javascript:fetch_point_list({i})"]').click()
                 await page.wait_for_timeout( 3000 )
@@ -51,18 +58,18 @@ async def run( ) :
             for item in items :
                 title = await item.query_selector( '.title' )
                 title = await title.inner_text() if title else "제목 없음"
-                star = await item.query_selector( '.star_wrap:has-text("전문가") > .num' )
-                star = await star.inner_text() if star else "전문가 평점 없음"
-                img = await item.query_selector( '.img_thumb' )
-                img = await img.get_attribute( 'src' ) if img else "이미지 없음"
+                star  = await item.query_selector( '.star_wrap:has-text("전문가") > .num' )
+                star  = await star.inner_text() if star else "전문가 평점 없음"
+                img   = await item.query_selector( '.img_thumb' )
+                img   = await img.get_attribute( 'src' ) if img else "이미지 없음"
 
 
 # 2-3 (데이터 적재): 수집된 데이터를 딕셔너리로 묶어 리스트에 저장하고 최종 출력한다.
 
                 item_list.append( { '제목' : title , "이미지링크" : img , "전문가평점" : star } )
     
-    # 직접 브라우저 종료
-    # await browser.close()
+        # 직접 브라우저 종료
+        await browser.close()
 
     return item_list 
     
