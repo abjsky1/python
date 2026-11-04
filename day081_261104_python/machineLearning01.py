@@ -136,4 +136,21 @@ plt.legend()
 plt.show()
 
 
+# 모델 평가
+# 테스트용 특성을 넣어서 테스트 예측 결과
+Y_pred = model.predict( X_test )
+# 평균 제곱 오차 계산 : MSE
+from sklearn.metrics import mean_squared_error
+rmse = np.sqrt( mean_squared_error( Y_test , Y_pred ) )
+print( 'rmse :' , rmse )  # rmse : 160.01413830813442
+
+
+# 결정계수( R SCORE ) : 타겟 데이터의 전체 변동성 대비 모델이 얼마나 잘 설명하는지 0 ~ 1 비율
+# 1(100%)에 가까울수록 모델이 데이터의 패턴을 완벽히 설명함
+# 0(0%)은 단순히 평균값으로 찍는 것과 차이가 없음
+# 음수 가 나오면 평균으로 예측하는 것보다도 못한 엉터리 모델
+from sklearn.metrics import r2_score
+r2 = r2_score( Y_test , Y_pred ) 
+print( r2 )  # 0.8199897860284712
+# 해석 방법 : 오차를 약 18프로 줄였다.
 
