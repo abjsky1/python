@@ -64,7 +64,7 @@ print(train_r2 , test_r2)
 from sklearn.linear_model import Ridge
 pipe_model = Pipeline( [ 
                          ( "poly" , PolynomialFeatures( degree=2 , include_bias=False ) ) , 
-                         ( "sclaer" , StandardScaler( ) ) ,
+                         ( "scaler" , StandardScaler( ) ) ,
                          ( "ridge" , Ridge( ) ) 
                                                                                             ] )
 
