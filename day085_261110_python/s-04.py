@@ -96,4 +96,12 @@ print( best_pipe.score(X_train, Y_train) )
 print( best_pipe.score(X_test, Y_test) )
 
 
+# 서빙 , 학습된 모델 저장하고 다른 곳에서 호출
+# 연구/학습 : 코랩(고사양GPU)에서 학습 --> 실제 서버(Fast API)에서 호출
+import joblib
+# joblib.dump( 저장할모델 , 경로 )
+joblib.dump( best_pipe , './day085_261110_python/fish_model.pkl' )
+
+
+
 print( list(range(2,10)) )
