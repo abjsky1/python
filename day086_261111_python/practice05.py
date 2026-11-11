@@ -89,6 +89,8 @@ kf = StratifiedKFold( n_splits=5 , shuffle=True , random_state=42)
 grid = GridSearchCV(pipe, param_grid , cv=kf , scoring='f1_macro' , n_jobs=-1)
 # 4. 최적 추정기(best_estimator_)로 X_test를 평가하고 classification_report를 출력하세요.
 grid.fit(X_train , Y_train)
+grid.best_params_
+grid.best_score_
 best_model = grid.best_estimator_
 classification_report(Y_test, best_model.predict(X_test))
 
@@ -112,3 +114,9 @@ sample.info()
 # 4. 불러온 파이프라인의 predict() 및 predict_proba()에 직접 전달하여 예측 커팅 등급(cut)과 가장 높은 확신도(최대 확률 %)를 출력하세요.
 print( model_loaded.predict(sample) )
 print( model_loaded.predict_proba(sample) )
+
+import numpy as np
+print(np.max( model_loaded.predict_proba(sample) ))
+print(np.round( np.max( model_loaded.predict_proba(sample) ) , 3 ))
+high = np.round( np.max( model_loaded.predict_proba(sample) ) , 3 )
+print('가장 높은 확신도 :' , f'{high*100:.2f}%' )
