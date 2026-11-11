@@ -62,3 +62,35 @@ print( model.classes_ )
 import numpy as np
 print( np.round(Y_pred_proba[:3], 3) )
 
+
+
+
+
+# 평가지표
+# average='macro' : 클래스마다 개수 다 다르므로 산술평균 값으로 계산
+from sklearn.metrics import accuracy_score , precision_score , recall_score , f1_score
+
+# 정확도 : 전체 예측 건수 중 맞힌 정답 비율
+accuracy_score(Y_test , Y_pred)
+
+# 정밀도 : 예측한 것 중 실제로 맞힌 비율
+precision_score(Y_test , Y_pred , average='macro')
+
+# 재현율 : 실제 정답인 것 중에 모델이 놓지지 않고 찾아낸 비율
+recall_score(Y_test , Y_pred , average="macro")
+
+# f1 점수 / 표준 : 정밀도와 재현율 간의 조화 조정하기위한 조화평균
+f1_score(Y_test , Y_pred , average='macro')
+
+# 4대 평가지표는 혼동 행렬을 사용하여 계산
+
+# 혼동 행렬 시각화
+import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
+ConfusionMatrixDisplay.from_predictions(Y_test , Y_pred)
+plt.grid()
+plt.show()
+
+from sklearn.metrics import classification_report
+# 리포트 (평가 지도 보고서)
+print( classification_report(Y_test, Y_pred) )
