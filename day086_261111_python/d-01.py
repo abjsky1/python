@@ -94,3 +94,26 @@ plt.show()
 from sklearn.metrics import classification_report
 # 리포트 (평가 지도 보고서)
 print( classification_report(Y_test, Y_pred) )
+
+
+# 파이프라인 구성
+from sklearn.pipeline import Pipeline
+pipe = Pipeline( [ ('scaler' , StandardScaler()) , 
+                   ("model" , LogisticRegression( max_iter=1000, random_state=42)) ] )
+param_grid = { "model__C" : [0.01, 0.1, 1.0, 10.0, 100.0] }
+# K-Fold 이용한 교차 검증 분할기
+# 표준 : KFold
+# 다중분류 : StratifiedGroupKFold
+from sklearn.model_selection import KFold, StratifiedKFold
+cv = StratifiedKFold( n_splits=5 , shuffle=True , random_state=42 )
+
+from sklearn.model_selection import GridSearchCV
+grid = GridSearchCV(pipe , param_grid , cv=cv , scoring="f1_macro", n_jobs=-1)
+grid.fit(X_train , Y_train)
+
+print(grid.best_params_)
+print(grid.best_score_)
+best_model = grid.best_estimator_
+Y_pred = best_model.predict(X_test)
+
+print( classification_report(Y_test, Y_pred) )
