@@ -14,3 +14,18 @@ async def items():
     # 서비스 안에 함수 호출
     return item_service.items()
 
+# 저장
+@router.post("/save")
+async def save( item:dict ) :
+    return item_service.save( item )
+
+# 수정
+@router.put("/update")
+async def update( item:dict ) :
+    return item_service.update( item ) 
+
+# 삭제
+@router.delete("/delete")
+async def delete( id:int ) :
+    return item_service.delete( id )
+
