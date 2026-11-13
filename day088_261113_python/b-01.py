@@ -60,8 +60,8 @@ for name , model in models.items() :
 # LGBMClassifier(learning_rate=0.05, max_depth=4, n_estimator=100, n_jobs=-1,
 #                random_state=42, verbose=-1)
 # =========== 모델명 :  LightGBM
-# > 학습 소요시간 :  0.07851266860961914 초
-# > train acc :  0.8795458918606889
-# > test  acc :  0.8607692307692307
-# > f1_score  :  0.9089079013588324
+# > 학습 소요시간 :  0.07851266860961914 초    빠르다
+# > train acc :  0.8795458918606889          
+# > test  acc :  0.8607692307692307          과대적합 우수
+# > f1_score  :  0.9089079013588324          스코어 우수
 
