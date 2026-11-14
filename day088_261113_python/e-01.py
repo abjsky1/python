@@ -58,5 +58,47 @@ print(model.feature_importances_)
 
 
 
+from sklearn.ensemble import RandomForestClassifier
+model = RandomForestClassifier(
+    # 트리의 최대 깊이 제한 ( 과적합 억제 )
+    max_depth=10,
+    # 클래스 불균형 해소 ( 과접합 억제 )
+    class_weight="balanced",
+    # 생성할 결정 트리 개수 기본값 100 , 1000~3000
+    n_estimators=50,
+    # 각 노드에서 분할 시 특성의 최대 개수
+    # 분류는 'sqrt' , 회귀는 'log2'
+    max_features='sqrt',
+    # CPU 최대 사용
+    n_jobs=-1,
+    # 랜덤 시드
+    random_state=42
+)
+model.fit(X_train , Y_train)
+# 분류모델에서는 Accuracy
+print( model.score(X_train , Y_train) )  # 0.7852607273426977
+print( model.score(X_test , Y_test) )    # 0.7738461538461539
 
 
+
+
+from sklearn.ensemble import RandomForestClassifier
+model = RandomForestClassifier(
+    # 트리의 최대 깊이 제한 ( 과적합 억제 )
+    max_depth=3,
+    # 클래스 불균형 해소 ( 과접합 억제 )
+    class_weight="balanced",
+    # 생성할 결정 트리 개수 기본값 100 , 1000~3000
+    n_estimators=1000,
+    # 각 노드에서 분할 시 특성의 최대 개수
+    # 분류는 'sqrt' , 회귀는 'log2'
+    max_features='sqrt',
+    # CPU 최대 사용
+    n_jobs=-1,
+    # 랜덤 시드
+    random_state=42
+)
+model.fit(X_train , Y_train)
+# 분류모델에서는 Accuracy
+print( model.score(X_train , Y_train) )  # 0.7852607273426977
+print( model.score(X_test , Y_test) )    # 0.7738461538461539
