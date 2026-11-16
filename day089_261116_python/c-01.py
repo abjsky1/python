@@ -59,7 +59,7 @@ def objective( trial ) :
             min_child_samples= trial.suggest_int( 'min_child_samples' , 10 , 50 ),
             subsample= trial.suggest_float( 'subsample' , 0.6 , 1.0 ),
             subsample_freq=1,
-            varbose= -1,
+            verbose= -1,
             random_state= 42,
             n_jobs= -1,
             colsample_bytree= trial.suggest_float('colsample_bytree' , 0.6 , 1.0 )
@@ -89,12 +89,34 @@ def objective( trial ) :
 optuna.create_study(direction='maximize')
 # 현재 실습은 회귀모델이며 r2결정계수 평가지표 사용할 예정
 sampler = optuna.samplers.TPESampler( seed=42 )
-Study = optuna.create_study( direction='maximize', sampler=sampler )
+study = optuna.create_study( direction='maximize', sampler=sampler )
 # Study.optimize( 목적함수 , n_trials= 반복수(최소100단위) )
-Study.optimize( objective , n_trials= 20 ) # 반복수 만큼 목적함수 실행
+study.optimize( objective , n_trials= 20 ) # 반복수 만큼 목적함수 실행
 
 # 최적의 모델
-print( '최적 하이퍼파라미터 :' , Study.best_params )
-optimal_model = Study.best_trial.user_attrs['best_n_estimators']
+print( '최적 하이퍼파라미터 :' , study.best_params )
+optimal_model = study.best_trial.user_attrs['best_n_estimators']
 print( '최적의 트리모델 :', optimal_model)
 
+# 최적 하이퍼파라미터 : {'learning_rate': 0.0655020265678206, 
+#                     'num_leaves': 16, 
+#                     'max_depth': 6, 
+#                     'min_child_samples': 50, 
+#                     'subsample': 0.9989859135407586, 
+#                     'colsample_bytree': 0.9939374085734083}
+
+# 최적의 트리모델 : 174
+
+# 최적의 모델 설정.
+final_model = LGBMRegressor(**study.best_params, n_estimators= optimal_model, subsample_freq=1, random_state=42 , verbose= -1, n_jobs= -1)
+final_model.fit(X_train , Y_train)
+final_pred = final_model.predict(X_test)
+
+import shap
+import matplotlib.pyplot as plt
+
+explainer = shap.TreeExplainer( final_model )
+shap_values_test = explainer(X_test)
+
+shap.plots.bar( shap_values_test , show=False )
+plt.show()
