@@ -26,10 +26,64 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_
 # 1. optuna 설치 : pip install optuna shap
 import optuna
 optuna.logging.set_verbosity( optuna.logging.WARNING )
+from lightgbm import LGBMRegressor
+from lightgbm import early_stopping
+import numpy as np
 
 # 목적함수 만들기 : 각 탐색 시도마다 교차 검증 수행 후 평균 성능 반환 , *콜백함수( trial )
 def objective( trial ) :
-    pass
+    # 4-1 교차검증 Kfold
+    from sklearn.model_selection import KFold
+    # 교차별 학습 모델
+    cv = KFold( n_splits=5 , shuffle=True , random_state=42 )
+    # 각 폴더별 검증 점수
+    cv_r2_scores = []
+    # 각 폴더별 최적 트리 번호 저장
+    best_iterations = []
+
+    for train_idx , val_idx in cv.split( X_train , Y_train ) :
+        # 훈련 데이터 세트 내부에서 훈련용/검증용 분할 수행
+        # KFold 는 훈련데이터(80%) 안에서 검증용을 따로 만듦
+        # K번째 폴드의 훈련용/검증용 인덱스 반환
+        # n_splits=5 : 5번 반복수행 - 각각 한번씩 검증용
+        X_tr , X_val = X_train.iloc[train_idx] , X_train.iloc[val_idx]
+        Y_tr , Y_val = Y_train.iloc[train_idx] , Y_train.iloc[val_idx]
+
+        # KFold 에서 분할한 훈련용 모델 만들기
+        model = LGBMRegressor(
+            n_estimators= 1000,
+            # trial.suggest_XXX( '파라미터명' , 시작값 , 끝값 )
+            learning_rate= trial.suggest_float( 'learning_rate' , 0.01 , 0.1 ),
+            num_leaves= trial.suggest_int( 'num_leaves' , 10 , 30 ),
+            max_depth= trial.suggest_int( 'max_depth' , 3 , 10 ),
+            min_child_samples= trial.suggest_int( 'min_child_samples' , 10 , 50 ),
+            subsample= trial.suggest_float( 'subsample' , 0.6 , 1.0 ),
+            subsample_freq=1,
+            varbose= -1,
+            random_state= 42,
+            n_jobs= -1,
+            colsample_bytree= trial.suggest_float('colsample_bytree' , 0.6 , 1.0 )
+          # class_weight 는 회귀모델이므로 생략
+        )
+        # 교차별 학습 성능 저장
+        model.fit(X_tr , Y_tr , eval_set=[ (X_val , Y_val) ] , callbacks=[ early_stopping( stopping_rounds=50 , verbose=False ) ] )
+
+        # 교차별 학습 성능 저장
+        # k폴드별 검증 평가 r2
+        r2 = model.score(X_val , Y_val)
+        # k폴드별 평가 점수 저장
+        cv_r2_scores.append( r2 )
+        # k폴드별 검증 평가 r2
+        best_iterations.append( model.best_iteration_ )
+
+    # k폴드에서 산출된 최적 트리 개수의 평균값을 trial의 속성으로 저장
+    # k폴드만큼 구한 최적의 트리 리스트에서 평균값으로 trial 저장
+    trial.set_user_attr( 'best_n_estimators' , int( np.mean( best_iterations ) ) )
+    # 검증 평가 평균 점수 반환
+    return np.mean( cv_r2_scores )
+
+
+    
 
 # optuna.create_study(direction='maximize/minimize')
 optuna.create_study(direction='maximize')
@@ -38,4 +92,9 @@ sampler = optuna.samplers.TPESampler( seed=42 )
 Study = optuna.create_study( direction='maximize', sampler=sampler )
 # Study.optimize( 목적함수 , n_trials= 반복수(최소100단위) )
 Study.optimize( objective , n_trials= 20 ) # 반복수 만큼 목적함수 실행
+
+# 최적의 모델
+print( '최적 하이퍼파라미터 :' , Study.best_params )
+optimal_model = Study.best_trial.user_attrs['best_n_estimators']
+print( '최적의 트리모델 :', optimal_model)
 
