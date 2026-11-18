@@ -101,6 +101,74 @@ from sklearn.cluster import HDBSCAN
 model = HDBSCAN(min_cluster_size=15 , min_samples=5 , copy=True)
 pred = model.fit_predict(X_train_scaled)
 print(pred)  # 군집/그룹 4개 , 이상치 1개(-1)
+X_train['hdb_cluster'] = pred
+print( X_train['hdb_cluster'].value_counts() )
+
+# min_cluster_size=15 , min_samples=5 
+#  hdb_cluster
+#  0     194
+#  1      85
+#  2      56
+#  3      20
+# -1      32
+
+# min_cluster_size=30 , min_samples=2 
+#  hdb_cluster
+#  0      81
+#  1     184
+#  2      89
+# -1      33
+
+# 시각화 : 
+noise_mask = (X_train['hdb_cluster']==-1)
+plt.scatter(X_train.loc[~noise_mask,'G3'] , X_train.loc[~noise_mask,'absences'] , c=X_train.loc[~noise_mask,'hdb_cluster'])
+plt.scatter(X_train.loc[noise_mask,'G3'] , X_train.loc[noise_mask,'absences'] , c='red' , marker='*')
+plt.show()
+
+
+# PCA(주성분 분석) : 고차원 데이터의 분산을 저차원으로 축소하여 주 성분/특성 만들기
+# 고차원 : 다수의 특성들의 가중치/기울기 표현
+# 1차방정식 -> 다차방정식 -> 1차방정식
+# 상관계수 : A특성과 B특성의 관계성(기울기) - A특성이 변경될 때, B가 얼마나 변경되는지
+from sklearn.decomposition import PCA
+# pca = PCA(n_components= 변경할 차원수)
+pca = PCA(n_components= 2 , random_state=42)
+X_train_pca = pca.fit_transform(X_train_scaled)
+X_test_pca = pca.transform(X_test_scaled)
+
+# 행별 가중치 확인
+print(X_train_pca)
+# 주 특성별 가중치 확인
+print(pca.components_.T)
+
+#      주성분 1     주성분 2
+# [[ 0.13219328 -0.61408979]    - 공부시간 
+#  [-0.00599139  0.78051288]    - 결석일수
+#  [ 0.56213845  0.00343157]    - 1학기 성적
+#  [ 0.58342273  0.03443535]    - 2학기 성적
+#  [ 0.57105808  0.11178463]]   - 3학기 성적
+
+#             공부시간      결석일수     1학기성적    2학기성적    3학기성적
+# 주성분 1 [[ 0.13219328 -0.00599139  0.56213845  0.58342273  0.57105808]
+# 주성분 2  [-0.61408979  0.78051288  0.00343157  0.03443535  0.11178463]]
+
+# 주성분 1 에서는 성적과 강한 관계
+# 주성분 2 에서는 결석일수와 강한 관계
+
+pca_hdb = HDBSCAN( min_cluster_size=15 , min_samples=5 )
+# 5차원에서 2차원으로 축소한 PCA 학습
+pca_pred = pca_hdb.fit_predict(X_train_pca)
+X_train['PC1'] = X_train_pca[:,0]
+X_train['PC2'] = X_train_pca[:,1]
+X_train['PCA_cluster'] = pca_pred
+print(X_train[['PC1','PC2','PCA_cluster']].head(30))
+# PC1 에 양의 관계를 가지면 성적 상
+# PC1 에 음의 관계를 가지면 성적 하
+
+
+print(pca.explained_variance_ratio_.round(3))
+print(f"{pca.explained_variance_ratio_.sum():.1%}")
+
 
 
 # 머신러닝 정리
@@ -131,3 +199,6 @@ print(pred)  # 군집/그룹 4개 , 이상치 1개(-1)
 
 # next step
 # 딥러닝
+# 이미지 3차원 : R(1)G(2)B(3) + 장수(4)
+# 흑백 1차원   : G(1) + 장수(2)
+
