@@ -213,12 +213,6 @@ plt.show()
 
 
 
-
-print(pca.explained_variance_ratio_.round(3))
-print(f"{pca.explained_variance_ratio_.sum():.1%}")
-
-
-
 # 머신러닝 정리
 # - 파이프라인 
 # - 데이터셋 => 전처리 => 특성/타겟 분리 => 스케일링/원핫인코딩 => 모델학습(파라미터선정) => 모델저장 => 모델불러오기 => 모델로 예측/추론
