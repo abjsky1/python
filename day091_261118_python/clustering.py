@@ -101,3 +101,33 @@ from sklearn.cluster import HDBSCAN
 model = HDBSCAN(min_cluster_size=15 , min_samples=5 , copy=True)
 pred = model.fit_predict(X_train_scaled)
 print(pred)  # 군집/그룹 4개 , 이상치 1개(-1)
+
+
+# 머신러닝 정리
+# - 파이프라인 
+# - 데이터셋 => 전처리 => 특성/타겟 분리 => 스케일링/원핫인코딩 => 모델학습(파라미터선정) => 모델저장 => 모델불러오기 => 모델로 예측/추론
+#
+# 지도학습    -  분류  - 종속변수가 범주/카테고리 
+#                    - 대표모델 : (대규모) LightBGM , (소규모) Logistic,Tree    
+#                    - 평가지표 : F1-score , Accuracy    
+#            -  회귀  - 종속변수가 연속적인 수치 
+#                    - 대표모델 : (대규모) LightBGM , (소규모) Linear/ridge/lasso
+#                    - 평가지표 : R2 , RMSE
+# 비지도학습  -  군집  - 종속변수가 없음
+#                    - 대표모델 : KMean , HDBSCAN
+#                    - 평가지표 : SSE , Silhouette Score
+#
+# ** 트리모델은 스케일링 필요 없음
+# ** 앙상블(LightBGM) 원핫인코딩 자동(카테고리타입)
+
+# 앙상블 : 여러 모델 학습
+# - 배깅(Bagging)    :        병렬          - 모델들의 오차값 평균으로 최적 파라미터 선정 
+# - 부스팅(Boosting) : Gradient(경사하강법)  - 이전에 모델의 오차를 다음 모델이 보완하며 최적 파라미터 선정
+
+# 튜닝 
+# - 앙상블           : optuna
+# - Logistic/Linear : (GridSearchCV)
+
+
+# next step
+# 딥러닝
