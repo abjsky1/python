@@ -48,7 +48,10 @@ plt.show()
 
 
 # 최적의 K(군집/그룹) 수 찾기 VS 지도학습( F1 분류 / R2 회귀 )
+from sklearn.metrics import silhouette_score
 sse_list = []
+sil_list = []
+
 for k in range(2, 20) :
     # k반복마다 학습 모델 생성
     k_temp = KMeans( n_clusters=k , random_state=42 )
@@ -56,5 +59,45 @@ for k in range(2, 20) :
     preds = k_temp.fit_predict(X_train_scaled)
     # 군집 결과에 각 샘플과 중심점 거리 제곱의 합 저장
     sse_list.append( k_temp.inertia_ ) 
-plt.plot( range(2,20) , sse_list , marker='o' )
+    sil_list.append( silhouette_score(X_train_scaled , preds) )
+
+# plt.plot( range(2,20) , sse_list , marker='o' )
+plt.plot( range(2,20) , sil_list , marker='o' )
 plt.show()
+
+
+import matplotlib.pyplot as plt
+
+# 1행 2열의 서브플롯 생성 (전체 가로 12, 세로 4 크기)
+fig, axs = plt.subplots(1, 2, figsize=(12, 4))
+
+# 첫 번째 그래프 (왼쪽): Elbow (SSE / Inertia)
+axs[0].plot(range(2, 20), sse_list, marker='o')
+axs[0].set_title('Elbow Method (SSE)')
+axs[0].set_xlabel('k')
+axs[0].set_ylabel('SSE (Inertia)')
+
+# 두 번째 그래프 (오른쪽): Silhouette Score
+axs[1].plot(range(2, 20), sil_list, marker='o', color='orange')
+axs[1].set_title('Silhouette Score')
+axs[1].set_xlabel('k')
+axs[1].set_ylabel('Silhouette')
+
+plt.tight_layout() # 그래프 간격 자동 조절
+plt.show()
+
+# sse : 엘보우지점(기울기가 완만하게 꺾이는 변곡점) 5 ~ 10
+# 실루엣 : 높은 값일수록 이상적
+# 두 차트 해석하여 최적의 K 해석
+# 최적 k 군집하기
+best_model = KMeans(n_clusters=9)
+pred = best_model.fit_predict(X_train_scaled)
+print(pred[:10])
+print(X_train_scaled[:10])
+
+# HDBSCAN : 밀도 기반으로 군집 , 이상치(-1) 자동 탐지
+from sklearn.cluster import HDBSCAN
+# model = HDBSCAN( min_cluster_size= 군집하기위한 최소데이터수 , min_samples= 군집 판별할 때 계산되는 이웃 수 )
+model = HDBSCAN(min_cluster_size=15 , min_samples=5 , copy=True)
+pred = model.fit_predict(X_train_scaled)
+print(pred)  # 군집/그룹 4개 , 이상치 1개(-1)
