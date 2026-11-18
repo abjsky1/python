@@ -166,6 +166,54 @@ print(X_train[['PC1','PC2','PCA_cluster']].head(30))
 # PC1 에 음의 관계를 가지면 성적 하
 
 
+# 이상치 제외한 G3 평균 계산
+normal_clusters = X_train[X_train['PCA_cluster'] != -1]
+cluster_means = normal_clusters.groupby('PCA_cluster')['G3'].mean()
+sorted_cluster = cluster_means.sort_values(ascending=True)
+print(sorted_cluster)
+
+# PCA_cluster
+# 2     9.562500
+# 1    10.076923
+# 0    12.500000
+# 3    12.533333
+# 4    15.142857
+# Name: G3, dtype: float64
+
+# 라벨링
+labels= {}
+for idx, cluster_id in enumerate(sorted_cluster.index , start=1) :
+    labels[cluster_id] = f"Level{idx}"
+
+print(labels)
+# 이상치는 리스트 가장 뒤에
+labels[-1] = 'Outlier'
+print(labels)
+# {2: 'Level1', 1: 'Level2', 0: 'Level3', 3: 'Level4', 4: 'Level5', -1: 'Outlier'}
+X_train['PCA_cluster_label'] = X_train['PCA_cluster'].replace(labels)
+# 군집화한 결과 가지고 추후에 지도학습
+print(X_train)
+# 지도학습에서 성능 향상하기 위한 방법
+# 0 전처리
+# 1 하이퍼파라미터
+# 2 파생변수
+
+# 자바 활용방법 : 시각화
+for lbl in list(labels.values()) : 
+    sub = X_train[X_train['PCA_cluster_label'] == lbl]
+    if lbl == 'Outlier' :
+        plt.scatter(sub['PC1'] , sub['PC2'] , c='red', marker='*')
+    else :
+        plt.scatter(sub['PC1'] , sub['PC2'] , marker='o' , label=lbl)
+plt.legend()
+plt.show()
+
+# PCA 시각화하게 되면 특성들을 2가지(2D) 형태로 표현 가능
+# 현재 주성분 : PC1(G1,G2,G3) PC2(공부시간,결석일수)
+
+
+
+
 print(pca.explained_variance_ratio_.round(3))
 print(f"{pca.explained_variance_ratio_.sum():.1%}")
 
